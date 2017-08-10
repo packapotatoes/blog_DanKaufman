@@ -16,7 +16,7 @@ The minimum desirable functionality is this:
 
 * Functionality:
 
-  * CRUD for posts and comments. (Partially done. Cannot add comment to a post in a blog because 'read_post' does not currently take owndership of the Post from the Blog)
+  * CRUD for posts and comments. (Partially done. Adding comment to a post that is part of a blog does not work. Fixed in branch `updates` )
 
   * Find all posts or comments or both by:
     
@@ -26,7 +26,7 @@ The minimum desirable functionality is this:
         
     * Label search    (Done)
         
-    * Body search     (Does not compile (currently commented out) -- issue with searching using '.contains' on a String)
+    * Body search     (Does not compile (currently commented out) -- issue with searching using `.contains` on a String)
     
     
 In the name of practice and because I need a porject to work on, I am continuing to work on this in a new branch.
