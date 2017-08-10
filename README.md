@@ -27,3 +27,6 @@ The minimum desirable functionality is this:
     * Label search    (Done)
         
     * Body search     (Does not compile (currently commented out) -- issue with searching using '.contains' on a String)
+    
+    
+In the name of practice and because I need a porject to work on, I am continuing to work on this in a new branch.
