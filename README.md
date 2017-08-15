@@ -4,7 +4,7 @@ _Date_: 8/7/17
     
 run 'cargo test' to test functionality
     
-In the name of practice and because I need a porject to work on, I am continuing to work on this in a new branch.In the name of practice and because I need a porject to work on, I am continuing to work on this in a new branch.
+In the name of practice and because I need a project to work on, I am continuing to work on this in a new branch.
 
 The minimum desirable functionality is this:
 
