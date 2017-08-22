@@ -146,9 +146,9 @@ impl Blog {
     pub fn search_by_title(&mut self, title: String) -> Vec<usize> {
         let mut post_matches: Vec<usize> = Vec::new();
 
-        for count in 0 .. self.posts.len() {
-            if self.posts[count].title == title {
-                post_matches.push(count);
+        for (index, post) in self.posts.iter().enumerate() {
+            if *post.title == title {
+                post_matches.push(index);
             }
         }
 
