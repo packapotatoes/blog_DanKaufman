@@ -46,13 +46,17 @@ pub struct Comment {
 
 impl Blog {
     // a post must be created before comments can be added. labels are optional
-    pub fn create_post(&mut self, title: String, author: String, body: String, labels_opt: Option<Vec<String>>) -> usize {
+    pub fn create_post(&mut self,
+                       title: String,
+                       author: String,
+                       body: String,
+                       labels_opt: Option<Vec<String>>) -> usize {
         let new_post = Post {
             title: title,
             author: author,
             body: body,
-            labels: if let Some(l) = labels_opt {
-                l
+            labels: if let Some(lbl) = labels_opt {
+                lbl
             }else {
                 Vec::new()
             },
@@ -70,6 +74,11 @@ impl Blog {
         &self.posts[post_index]
     }
 
+    pub fn get_post(&mut self, post_index: usize) -> &mut Post {
+        &mut self.posts[post_index]
+    }
+
+    // change title, body or labels of a post
     pub fn update_post(&mut self, post_index: usize, title: Option<String>, body: Option<String>, labels: Option<Vec<String>>) {
 
         if let Some(t) = title {
@@ -149,10 +158,10 @@ impl Blog {
     pub fn search_by_label(&mut self, label: String) -> Vec<usize> {
         let mut post_matches: Vec<usize> = Vec::new();
 
-        for count in 0 .. self.posts.len() {
-            for label_count in 0 .. self.posts[count].labels.len() {
-                if self.posts[count].labels[label_count] == label {
-                    post_matches.push(count);
+        for (index, post) in self.posts.iter().enumerate() {
+            for lab in post.labels.iter() {
+                if *lab == label {
+                    post_matches.push(index);
                 }
             }
         }
@@ -179,8 +188,12 @@ impl Blog {
         (post_matches, comment_matches)
     }*/
 
-    pub fn create_comment(&mut self, post: usize, author: String, body: String) -> usize {
-        self.posts[post].create_comment(author, body)
+    pub fn create_comment(&mut self, post_index: usize, author: String, body: String) -> usize {
+        self.posts[post_index].create_comment(author, body)
+    }
+
+    pub fn update_comment(&mut self, post_index: usize, comment_index: usize, body: String) {
+        self.posts[post_index].update_comment(comment_index, body);
     }
 
 }
@@ -211,13 +224,10 @@ impl Post {
     }
 }
 
+// run with "-- --nocapture" to see stdout for more debug info
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn it_works() {
-    }
 
     #[test]
     fn build_comment() {
@@ -255,7 +265,8 @@ mod tests {
             comments: Vec::new(),
         };
 
-        post1.create_comment(String::from("Jane Doe"), String::from("Comment content"));
+        post1.create_comment(String::from("Jane Doe"),
+                             String::from("Comment content"));
 
         assert_eq!("Jane Doe", post1.comments[0].author);
         assert_eq!("Comment content", post1.comments[0].body);
@@ -271,14 +282,23 @@ mod tests {
             comments: Vec::new(),
         };
 
-        post1.create_comment(String::from("Jane Doe"), String::from("Comment content"));
+        post1.create_comment(String::from("Jane Doe"),
+                             String::from("Comment content"));
 
         let expected_comment = Comment{
             author: String::from("Jane Doe"),
             body: String::from("Comment content")
         };
 
+        let unexpected_comment = Comment {
+            author: String::from("Jimmy Johns"),
+            body: String::from("cOmMeNt CoNtEnT")
+        };
+
+        println!("Read comment: {:?}", *post1.read_comment(0));
+
         assert_eq!(expected_comment, *post1.read_comment(0));
+        assert_ne!(unexpected_comment, *post1.read_comment(0));
     }
 
     #[test]
@@ -333,7 +353,9 @@ mod tests {
             posts: Vec::new(),
         };
 
-        blog1.create_post(String::from("Post Title"), String::from("John Doe"), String::from("Post body"), None);
+        blog1.create_post(String::from("Post Title"),
+                          String::from("John Doe"),
+                          String::from("Post body"), None);
 
         assert_eq!(expected_post1, blog1.posts[0]);
 
@@ -396,11 +418,20 @@ mod tests {
             posts: Vec::new(),
         };
 
-        blog1.create_post(String::from("Post Title"), String::from("John Doe"), String::from("Post body"), None);
+        blog1.create_post(String::from("Post Title"),
+                          String::from("John Doe"),
+                          String::from("Post body"),
+                          None);
 
-        blog1.create_post(String::from("Post Title2"), String::from("Jane Doe"), String::from("Post body2"), None);
+        blog1.create_post(String::from("Post Title2"),
+                          String::from("Jane Doe"),
+                          String::from("Post body2"),
+                          None);
 
-        blog1.create_post(String::from("Post Title"), String::from("John Doe"), String::from("Post body3"), None);
+        blog1.create_post(String::from("Post Title"),
+                          String::from("John Doe"),
+                          String::from("Post body3"),
+                          None);
 
         let post_results = blog1.search_by_title(String::from("Post Title"));
 
