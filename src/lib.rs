@@ -105,40 +105,18 @@ impl Blog {
         let mut post_matches: Vec<usize> = Vec::new();
         let mut comment_matches: Vec<(usize, usize)> = Vec::new();
 
-        if self.posts.len() > 0 {
-            for count in 0 .. self.posts.len() {
-                if self.posts[count].author == author {
-                    post_matches.push(count);
-                }
 
-                if self.posts[count].comments.len() > 0 {
-                    for com_count in 0 .. self.posts[count].comments.len() {
-                        if self.posts[count].comments[com_count].author == author {
-                            comment_matches.push((count, com_count));
-                        }
-                    }
+        for (post_index, post) in self.posts.iter().enumerate() {
+            if *post.author == author {
+                post_matches.push(post_index);
+            }
+
+            for (com_index, comment) in post.comments.iter().enumerate() {
+                if comment.author == author {
+                    comment_matches.push((post_index, com_index));
                 }
             }
         }
-
-        // couldn't figure out how to do this with iterators
-        /*
-        let mut iter = self.posts.iter();
-        let mut done = false;
-
-        while !done {
-            let next_post = iter.next();
-
-            if let Some()
-
-
-            if let Some(i) = iter.find(|post| post.author == author) {
-                match_indexes.push(i);
-            } else {
-                done = true;
-            }
-        }
-        */
 
         (post_matches, comment_matches)
     }
