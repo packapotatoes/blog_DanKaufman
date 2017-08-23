@@ -79,7 +79,11 @@ impl Blog {
     }
 
     // change title, body or labels of a post
-    pub fn update_post(&mut self, post_index: usize, title: Option<String>, body: Option<String>, labels: Option<Vec<String>>) {
+    pub fn update_post(&mut self,
+                       post_index: usize,
+                       title: Option<String>,
+                       body: Option<String>,
+                       labels: Option<Vec<String>>) {
 
         if let Some(t) = title {
             self.posts[post_index].title = t;
@@ -121,11 +125,12 @@ impl Blog {
         (post_matches, comment_matches)
     }
 
-    pub fn search_by_title(&mut self, title: String) -> Vec<usize> {
+    // take reference to String to search for. Only returns full matches, no partial match
+    pub fn search_by_title(&mut self, title: &String) -> Vec<usize> {
         let mut post_matches: Vec<usize> = Vec::new();
 
         for (index, post) in self.posts.iter().enumerate() {
-            if *post.title == title {
+            if *post.title == *title {
                 post_matches.push(index);
             }
         }
@@ -411,7 +416,7 @@ mod tests {
                           String::from("Post body3"),
                           None);
 
-        let post_results = blog1.search_by_title(String::from("Post Title"));
+        let post_results = blog1.search_by_title(&String::from("Post Title"));
 
         let expected_results = vec![0, 2];
 
