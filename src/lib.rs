@@ -152,24 +152,24 @@ impl Blog {
         post_matches
     }
 
-    /*pub fn search_by_body(&mut self, text: String) -> (Vec<usize>, Vec<(usize, usize)>) {
+    pub fn search_by_body(&mut self, text: String) -> (Vec<usize>, Vec<(usize, usize)>) {
         let mut post_matches: Vec<usize> = Vec::new();
         let mut comment_matches: Vec<(usize, usize)> = Vec::new();
 
-        for count in 0 .. self.posts.len() {
-            if self.posts[count].body.as_str().contains(text) {
-                post_matches.push(count);
+        for (post_index, post) in self.posts.iter().enumerate() {
+            if post.body.contains(text.as_str()) {
+                post_matches.push(post_index);
             }
 
-            for com_count in 0 .. self.posts[count].comments.len() {
-                if self.posts[count].comments[count].body.as_str().contains(text) {
-                    comment_matches.push((count, com_count));
+            for (comment_index, comment) in post.comments.iter().enumerate() {
+                if comment.body.contains(text.as_str()) {
+                    comment_matches.push((post_index, comment_index));
                 }
             }
         }
 
         (post_matches, comment_matches)
-    }*/
+    }
 
     pub fn create_comment(&mut self, post_index: usize, author: String, body: String) -> usize {
         self.posts[post_index].create_comment(author, body)
@@ -460,4 +460,45 @@ mod tests {
 
     }
 
+    #[test]
+    fn search_by_body_test() {
+        let mut blog1 = Blog {
+            posts: Vec::new(),
+        };
+
+        blog1.create_post(String::from("Post Title"),
+                          String::from("John Doe"),
+                          String::from("Post body1"),
+                          None);
+
+
+        blog1.create_post(String::from("Post Title"),
+                          String::from("John Doe"),
+                          String::from("Post body2"),
+                          None);
+
+
+        blog1.create_post(String::from("Post Title"),
+                          String::from("John Doe"),
+                          String::from("Post body3"),
+                          None);
+
+        blog1.create_comment(1,
+                             String::from("John Doe"),
+                             String::from("comment body0"));
+
+        blog1.create_comment(2,
+                             String::from("John Doe"),
+                             String::from("comment body1"));
+
+        let (post_results, comment_results) = blog1.search_by_body(String::from("1"));
+
+        println!("{:?}, {:?}", post_results, comment_results );
+
+        let expected_post_results = vec![0];
+        let expected_comment_results = vec![(2, 0)];
+
+        assert_eq!(expected_post_results, post_results);
+        assert_eq!(expected_comment_results, comment_results);
+    }
 }
