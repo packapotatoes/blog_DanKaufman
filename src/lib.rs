@@ -105,18 +105,17 @@ impl Blog {
     // super basic linear search
     // returns a tuple: first value is vec of post indices that match author
     //                  second value is vec of post and commment indices of comments that match
-    pub fn search_by_author(&mut self, author: String) -> (Vec<usize>, Vec<(usize, usize)>) {
+    pub fn search_by_author(&mut self, author: &String) -> (Vec<usize>, Vec<(usize, usize)>) {
         let mut post_matches: Vec<usize> = Vec::new();
         let mut comment_matches: Vec<(usize, usize)> = Vec::new();
 
-
         for (post_index, post) in self.posts.iter().enumerate() {
-            if *post.author == author {
+            if post.author.contains(author) {
                 post_matches.push(post_index);
             }
 
             for (com_index, comment) in post.comments.iter().enumerate() {
-                if comment.author == author {
+                if comment.author.contains(author) {
                     comment_matches.push((post_index, com_index));
                 }
             }
@@ -125,12 +124,11 @@ impl Blog {
         (post_matches, comment_matches)
     }
 
-    // take reference to String to search for. Only returns full matches, no partial match
     pub fn search_by_title(&mut self, title: &String) -> Vec<usize> {
         let mut post_matches: Vec<usize> = Vec::new();
 
         for (index, post) in self.posts.iter().enumerate() {
-            if *post.title == *title {
+            if post.title.contains(title) {
                 post_matches.push(index);
             }
         }
@@ -138,12 +136,12 @@ impl Blog {
         post_matches
     }
 
-    pub fn search_by_label(&mut self, label: String) -> Vec<usize> {
+    pub fn search_by_label(&mut self, label: &String) -> Vec<usize> {
         let mut post_matches: Vec<usize> = Vec::new();
 
         for (index, post) in self.posts.iter().enumerate() {
             for lab in post.labels.iter() {
-                if *lab == label {
+                if lab.contains(label) {
                     post_matches.push(index);
                 }
             }
@@ -152,17 +150,17 @@ impl Blog {
         post_matches
     }
 
-    pub fn search_by_body(&mut self, text: String) -> (Vec<usize>, Vec<(usize, usize)>) {
+    pub fn search_by_body(&mut self, text: &String) -> (Vec<usize>, Vec<(usize, usize)>) {
         let mut post_matches: Vec<usize> = Vec::new();
         let mut comment_matches: Vec<(usize, usize)> = Vec::new();
 
         for (post_index, post) in self.posts.iter().enumerate() {
-            if post.body.contains(text.as_str()) {
+            if post.body.contains(text) {
                 post_matches.push(post_index);
             }
 
             for (comment_index, comment) in post.comments.iter().enumerate() {
-                if comment.body.contains(text.as_str()) {
+                if comment.body.contains(text) {
                     comment_matches.push((post_index, comment_index));
                 }
             }
@@ -383,7 +381,7 @@ mod tests {
                              String::from("John Doe"),
                              String::from("comment body"));
 
-        let (post_results, comment_results) = blog1.search_by_author(String::from("John Doe"));
+        let (post_results, comment_results) = blog1.search_by_author(&String::from("John Doe"));
 
         let expected_post_results = vec![0, 2];
         let expected_comment_results = vec![(1, 0)];
@@ -401,7 +399,7 @@ mod tests {
             posts: Vec::new(),
         };
 
-        blog1.create_post(String::from("Post Title"),
+        blog1.create_post(String::from("Post Title1"),
                           String::from("John Doe"),
                           String::from("Post body"),
                           None);
@@ -411,15 +409,18 @@ mod tests {
                           String::from("Post body2"),
                           None);
 
-        blog1.create_post(String::from("Post Title"),
+        blog1.create_post(String::from("Post Title1"),
                           String::from("John Doe"),
                           String::from("Post body3"),
                           None);
 
-        let post_results = blog1.search_by_title(&String::from("Post Title"));
-
+        // test full match
+        let post_results = blog1.search_by_title(&String::from("Post Title1"));
         let expected_results = vec![0, 2];
+        assert_eq!(expected_results, post_results);
 
+        let post_results = blog1.search_by_title(&String::from("Title2"));
+        let expected_results = vec![1];
         assert_eq!(expected_results, post_results);
     }
 
@@ -450,12 +451,14 @@ mod tests {
                                     String::from("label4"),
                                     String::from("label3")]));
 
-
-
-        let post_results = blog1.search_by_label(String::from("label2"));
-
         let expected_post_results = vec![0, 1];
 
+        // test full string match
+        let post_results = blog1.search_by_label(&String::from("label2"));
+        assert_eq!(expected_post_results, post_results);
+
+        // test partial string match
+        let post_results = blog1.search_by_label(&String::from("2"));
         assert_eq!(expected_post_results, post_results);
 
     }
@@ -491,7 +494,7 @@ mod tests {
                              String::from("John Doe"),
                              String::from("comment body1"));
 
-        let (post_results, comment_results) = blog1.search_by_body(String::from("1"));
+        let (post_results, comment_results) = blog1.search_by_body(&String::from("1"));
 
         println!("{:?}, {:?}", post_results, comment_results );
 
