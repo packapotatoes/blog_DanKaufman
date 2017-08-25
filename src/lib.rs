@@ -105,7 +105,7 @@ impl Blog {
     // super basic linear search
     // returns a tuple: first value is vec of post indices that match author
     //                  second value is vec of post and commment indices of comments that match
-    pub fn search_by_author(&mut self, author: &String) -> (Vec<usize>, Vec<(usize, usize)>) {
+    pub fn search_by_author(&mut self, author: &str) -> (Vec<usize>, Vec<(usize, usize)>) {
         let mut post_matches: Vec<usize> = Vec::new();
         let mut comment_matches: Vec<(usize, usize)> = Vec::new();
 
@@ -124,7 +124,7 @@ impl Blog {
         (post_matches, comment_matches)
     }
 
-    pub fn search_by_title(&mut self, title: &String) -> Vec<usize> {
+    pub fn search_by_title(&mut self, title: &str) -> Vec<usize> {
         let mut post_matches: Vec<usize> = Vec::new();
 
         for (index, post) in self.posts.iter().enumerate() {
@@ -136,7 +136,7 @@ impl Blog {
         post_matches
     }
 
-    pub fn search_by_label(&mut self, label: &String) -> Vec<usize> {
+    pub fn search_by_label(&mut self, label: &str) -> Vec<usize> {
         let mut post_matches: Vec<usize> = Vec::new();
 
         for (index, post) in self.posts.iter().enumerate() {
@@ -150,7 +150,7 @@ impl Blog {
         post_matches
     }
 
-    pub fn search_by_body(&mut self, text: &String) -> (Vec<usize>, Vec<(usize, usize)>) {
+    pub fn search_by_body(&mut self, text: &str) -> (Vec<usize>, Vec<(usize, usize)>) {
         let mut post_matches: Vec<usize> = Vec::new();
         let mut comment_matches: Vec<(usize, usize)> = Vec::new();
 
@@ -340,10 +340,14 @@ mod tests {
 
         assert_eq!(expected_post1, blog1.posts[0]);
 
+        let s = String::from("New Post Title");
+
         blog1.update_post(0,
-                          Some(String::from("New Post Title")),
+                          Some(s),
                           Some(String::from("New post body")),
                           Some(vec![String::from("label1"), String::from("label2")]));
+
+        //println!("{}", s);
 
         let expected_post2 = Post {
             title: String::from("New Post Title"),
