@@ -12,14 +12,13 @@
         A comment has an author and a body. (Done)
 
     Functionality:
-        CRUD for posts and comments. (Partially done. Cannot add comment to a post in a blog
-                                      because 'read_post' does not currently take owndership of the Post from the Blog)
+        CRUD for posts and comments. (Done)
 
         Find all posts or comments or both by:
             Title search    (Done)
             Author search   (Done)
             Label search    (Done)
-            Body search     (Does not compile -- issue with searching using '.contains' on a String)
+            Body search     (Done)
 ***************************************************/
 
 
@@ -70,7 +69,7 @@ impl Blog {
     }
 
     //return reference to post at post_index
-    pub fn read_post(&mut self, post_index: usize) -> &Post {
+    pub fn read_post(&self, post_index: usize) -> &Post {
         &self.posts[post_index]
     }
 
@@ -105,7 +104,7 @@ impl Blog {
     // super basic linear search
     // returns a tuple: first value is vec of post indices that match author
     //                  second value is vec of post and commment indices of comments that match
-    pub fn search_by_author(&mut self, author: &str) -> (Vec<usize>, Vec<(usize, usize)>) {
+    pub fn search_by_author(&self, author: &str) -> (Vec<usize>, Vec<(usize, usize)>) {
         let mut post_matches: Vec<usize> = Vec::new();
         let mut comment_matches: Vec<(usize, usize)> = Vec::new();
 
@@ -124,7 +123,7 @@ impl Blog {
         (post_matches, comment_matches)
     }
 
-    pub fn search_by_title(&mut self, title: &str) -> Vec<usize> {
+    pub fn search_by_title(&self, title: &str) -> Vec<usize> {
         let mut post_matches: Vec<usize> = Vec::new();
 
         for (index, post) in self.posts.iter().enumerate() {
@@ -136,7 +135,7 @@ impl Blog {
         post_matches
     }
 
-    pub fn search_by_label(&mut self, label: &str) -> Vec<usize> {
+    pub fn search_by_label(&self, label: &str) -> Vec<usize> {
         let mut post_matches: Vec<usize> = Vec::new();
 
         for (index, post) in self.posts.iter().enumerate() {
@@ -150,7 +149,7 @@ impl Blog {
         post_matches
     }
 
-    pub fn search_by_body(&mut self, text: &str) -> (Vec<usize>, Vec<(usize, usize)>) {
+    pub fn search_by_body(&self, text: &str) -> (Vec<usize>, Vec<(usize, usize)>) {
         let mut post_matches: Vec<usize> = Vec::new();
         let mut comment_matches: Vec<(usize, usize)> = Vec::new();
 
@@ -191,7 +190,7 @@ impl Post {
         self.comments.len()
     }
 
-    pub fn read_comment(&mut self, comment_index: usize) -> &Comment {
+    pub fn read_comment(&self, comment_index: usize) -> &Comment {
         &self.comments[comment_index]
     }
 
