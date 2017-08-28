@@ -132,7 +132,7 @@ impl Blog {
     }
 
     pub fn create_comment(&mut self, post_index: usize, author: String, body: String) -> usize {
-        self.posts[post_index].create_comment(author, body)
+        self.posts[post_index].create_comment(&author, &body)
     }
 
     pub fn update_comment(&mut self, post_index: usize, comment_index: usize, body: String) {

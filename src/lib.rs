@@ -23,6 +23,7 @@
 
 pub mod blog;
 
+// these tests should probably be moved to various other files
 // run with "-- --nocapture" to see stdout for more debug info
 #[cfg(test)]
 mod tests {
@@ -65,9 +66,11 @@ mod tests {
             comments: Vec::new(),
         };
 
-        post1.create_comment(String::from("Jane Doe"),
-                             String::from("Comment content"));
+        let author = String::from("Jane Doe");
+        post1.create_comment(&author,
+                             "Comment content");
 
+        println!("{}", author);
         assert_eq!("Jane Doe", post1.comments[0].author);
         assert_eq!("Comment content", post1.comments[0].body);
     }
@@ -82,8 +85,8 @@ mod tests {
             comments: Vec::new(),
         };
 
-        post1.create_comment(String::from("Jane Doe"),
-                             String::from("Comment content"));
+        post1.create_comment("Jane Doe",
+                             "Comment content");
 
         let expected_comment = Comment{
             author: String::from("Jane Doe"),
@@ -111,7 +114,7 @@ mod tests {
             comments: Vec::new(),
         };
 
-        post1.create_comment(String::from("Jane Doe"), String::from("Comment content"));
+        post1.create_comment("Jane Doe", "Comment content");
 
         assert_eq!("Comment content", post1.comments[0].body);
         post1.update_comment(0, String::from("New comment content"));
@@ -128,7 +131,7 @@ mod tests {
             comments: Vec::new(),
         };
 
-        post1.create_comment(String::from("Jane Doe"), String::from("Comment content"));
+        post1.create_comment("Jane Doe", "Comment content");
 
         let expected_comment = Comment{
             author: String::from("Jane Doe"),

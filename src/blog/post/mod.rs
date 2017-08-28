@@ -11,11 +11,14 @@ pub struct Post {
 }
 
 impl Post {
-    pub fn create_comment(&mut self, author: String, body: String) -> usize{
-        let new_comment = Comment {
-            author: author,
-            body: body,
+    pub fn create_comment(&mut self, author: &str, body: &str) -> usize{
+        let mut new_comment = Comment {
+            author: String::new(),
+            body: String::new(),
         };
+
+        new_comment.author.push_str(author);
+        new_comment.body.push_str(body);
 
         self.comments.push(new_comment);
         self.comments.len()
