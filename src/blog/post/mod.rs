@@ -30,8 +30,10 @@ impl Post {
 
     // only possible to update body of comment
     // -- changing the author does not really make sense
-    pub fn update_comment(&mut self, comment_index: usize, body: String) {
-        self.comments[comment_index].body = body;
+    pub fn update_comment(&mut self, comment_index: usize, body: &str) {
+        let mut new_body = String::new();
+        new_body.push_str(body);
+        self.comments[comment_index].body = new_body;
     }
 
     pub fn delete_comment(&mut self, comment_index: usize) -> Comment {

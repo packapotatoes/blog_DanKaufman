@@ -9,14 +9,14 @@ pub struct Blog {
 impl Blog {
     // a post must be created before comments can be added. labels are optional
     pub fn create_post(&mut self,
-                       title: String,
-                       author: String,
-                       body: String,
+                       title: &str,
+                       author: &str,
+                       body: &str,
                        labels_opt: Option<Vec<String>>) -> usize {
-        let new_post = Post {
-            title: title,
-            author: author,
-            body: body,
+        let mut new_post = Post {
+            title: String::new(),
+            author: String::new(),
+            body: String::new(),
             labels: if let Some(lbl) = labels_opt {
                 lbl
             }else {
@@ -24,6 +24,10 @@ impl Blog {
             },
             comments: Vec::new(),
         };
+
+        new_post.title.push_str(title);
+        new_post.author.push_str(author);
+        new_post.body.push_str(body);
 
         self.posts.push(new_post);
 
@@ -131,11 +135,11 @@ impl Blog {
         (post_matches, comment_matches)
     }
 
-    pub fn create_comment(&mut self, post_index: usize, author: String, body: String) -> usize {
-        self.posts[post_index].create_comment(&author, &body)
+    pub fn create_comment(&mut self, post_index: usize, author: &str, body: &str) -> usize {
+        self.posts[post_index].create_comment(author, body)
     }
 
-    pub fn update_comment(&mut self, post_index: usize, comment_index: usize, body: String) {
+    pub fn update_comment(&mut self, post_index: usize, comment_index: usize, body: &str) {
         self.posts[post_index].update_comment(comment_index, body);
     }
 

@@ -117,7 +117,7 @@ mod tests {
         post1.create_comment("Jane Doe", "Comment content");
 
         assert_eq!("Comment content", post1.comments[0].body);
-        post1.update_comment(0, String::from("New comment content"));
+        post1.update_comment(0, "New comment content");
         assert_eq!("New comment content", post1.comments[0].body);
     }
 
@@ -156,9 +156,10 @@ mod tests {
             posts: Vec::new(),
         };
 
-        blog1.create_post(String::from("Post Title"),
-                          String::from("John Doe"),
-                          String::from("Post body"), None);
+        blog1.create_post("Post Title",
+                          "John Doe",
+                          "Post body",
+                          None);
 
         assert_eq!(expected_post1, blog1.posts[0]);
 
@@ -188,24 +189,24 @@ mod tests {
             posts: Vec::new(),
         };
 
-        blog1.create_post(String::from("Post Title"),
-                          String::from("John Doe"),
-                          String::from("Post body"),
+        blog1.create_post("Post Title",
+                          "John Doe",
+                          "Post body",
                           None);
 
-        blog1.create_post(String::from("Post Title2"),
-                          String::from("Jane Doe"),
-                          String::from("Post body2"),
+        blog1.create_post("Post Title2",
+                          "Jane Doe",
+                          "Post body2",
                           None);
 
-        blog1.create_post(String::from("Post Title3"),
-                          String::from("John Doe"),
-                          String::from("Post body3"),
+        blog1.create_post("Post Title3",
+                          "John Doe",
+                          "Post body3",
                           None);
 
         blog1.create_comment(1,
-                             String::from("John Doe"),
-                             String::from("comment body"));
+                             "John Doe",
+                             "comment body");
 
         let (post_results, comment_results) = blog1.search_by_author(&String::from("John Doe"));
 
@@ -225,19 +226,19 @@ mod tests {
             posts: Vec::new(),
         };
 
-        blog1.create_post(String::from("Post Title1"),
-                          String::from("John Doe"),
-                          String::from("Post body"),
+        blog1.create_post("Post Title1",
+                          "John Doe",
+                          "Post body",
                           None);
 
-        blog1.create_post(String::from("Post Title2"),
-                          String::from("Jane Doe"),
-                          String::from("Post body2"),
+        blog1.create_post("Post Title2",
+                          "Jane Doe",
+                          "Post body2",
                           None);
 
-        blog1.create_post(String::from("Post Title1"),
-                          String::from("John Doe"),
-                          String::from("Post body3"),
+        blog1.create_post("Post Title1",
+                          "John Doe",
+                          "Post body3",
                           None);
 
         // test full match
@@ -256,23 +257,23 @@ mod tests {
             posts: Vec::new(),
         };
 
-        blog1.create_post(String::from("Post Title"),
-                          String::from("John Doe"),
-                          String::from("Post body"),
+        blog1.create_post("Post Title",
+                          "John Doe",
+                          "Post body",
                           Some(vec![String::from("label1"),
                                     String::from("label2"),
                                     String::from("label3")]));
 
-        blog1.create_post(String::from("Post Title2"),
-                          String::from("Jane Doe"),
-                          String::from("Post body2"),
+        blog1.create_post("Post Title2",
+                          "Jane Doe",
+                          "Post body2",
                           Some(vec![String::from("label4"),
                                     String::from("label2"),
                                     String::from("label3")]));
 
-        blog1.create_post(String::from("Post Title"),
-                          String::from("John Doe"),
-                          String::from("Post body3"),
+        blog1.create_post("Post Title",
+                          "John Doe",
+                          "Post body3",
                           Some(vec![String::from("label1"),
                                     String::from("label4"),
                                     String::from("label3")]));
@@ -295,30 +296,30 @@ mod tests {
             posts: Vec::new(),
         };
 
-        blog1.create_post(String::from("Post Title"),
-                          String::from("John Doe"),
-                          String::from("Post body1"),
+        blog1.create_post("Post Title",
+                          "John Doe",
+                          "Post body1",
                           None);
 
 
-        blog1.create_post(String::from("Post Title"),
-                          String::from("John Doe"),
-                          String::from("Post body2"),
+        blog1.create_post("Post Title",
+                          "John Doe",
+                          "Post body2",
                           None);
 
 
-        blog1.create_post(String::from("Post Title"),
-                          String::from("John Doe"),
-                          String::from("Post body3"),
+        blog1.create_post("Post Title",
+                          "John Doe",
+                          "Post body3",
                           None);
 
         blog1.create_comment(1,
-                             String::from("John Doe"),
-                             String::from("comment body0"));
+                             "John Doe",
+                             "comment body0");
 
         blog1.create_comment(2,
-                             String::from("John Doe"),
-                             String::from("comment body1"));
+                             "John Doe",
+                             "comment body1");
 
         let (post_results, comment_results) = blog1.search_by_body(&String::from("1"));
 
