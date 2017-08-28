@@ -1,12 +1,13 @@
-use ::Post;
+pub mod post;
+use blog::post::Post;
 
 #[derive(Debug)]
 pub struct Blog {
-    posts: Vec<Post>
+    pub posts: Vec<Post>
 }
 
 impl Blog {
-        // a post must be created before comments can be added. labels are optional
+    // a post must be created before comments can be added. labels are optional
     pub fn create_post(&mut self,
                        title: String,
                        author: String,
